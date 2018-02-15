@@ -3,7 +3,7 @@ import ReactNative from 'react-native';
 import firebase from 'react-native-firebase';
 import { View, Text, TouchableHighlight, StyleSheet} from 'react-native';
 import Login from './Login.js';
-import StackNavigator from 'react-native-navigation';
+import { StackNavigator } from 'react-navigation';
 
 export default class UserPage extends React.Component {
   constructor(props) {
@@ -21,36 +21,23 @@ export default class UserPage extends React.Component {
       });
   }
 
-  handleSignOut = () =>{
-    firebase.auth().signOut()
-    .then(() => {
-      this.setState({ signedIn: false });
-    })
-    .catch((error) => {
+  handleSignOut() {
 
-    });
   }
 
   render() {
 
-    if(this.state.signedIn) {
-      return (
-        <View>
-          <Text>Welcome {this.state.user.email}</Text>
-          <TouchableHighlight
-            onPress={this.handleSignOut}
-            style={styles.button}
-          >
-            <Text>Logout</Text>
-          </TouchableHighlight>
-        </View>
-      );
-    } else {
-      return (
 
-        this.props.Navigation.navigate('Login')
-      );
-    }
+        return (
+          <View>
+            <TouchableHighlight
+              onPress={this.props.onLogOutPress}
+              style={styles.button}
+            >
+              <Text>Logout</Text>
+            </TouchableHighlight>
+          </View>
+        );
   }
 }
 

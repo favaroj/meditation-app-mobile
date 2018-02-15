@@ -23,8 +23,33 @@ export default class Login extends React.Component {
   }
 
   render() {
-    return (
-      <View style={styles.container}>
+      const { showLoginWithEmail } = this.state;
+      if(showLoginWithEmail) {
+        return <LoginWithEmail />;
+      } else {
+        return (
+          <View style={styles.loginMethodsContainer}>
+            <View>
+            <View style={styles.imageContainer}>
+            <Image style={styles.image} source={require('../assets/final-fantasy-bkgr.png')} />
+            <View style={styles.headerContainer}>
+            <Text style={styles.mainHeader}>Me-re-da</Text>
+            <Text style={styles.subHeader}>Terra Meditation</Text>
+            </View>
+            </View>
+            </View>
+            <TouchableHighlight
+            style={styles.button}
+              onPress={() => this.setState({showLoginWithEmail: true})}
+            >
+              <Text>Email</Text>
+            </TouchableHighlight>
+          </View>
+        );
+      }
+
+
+      /*<View style={styles.container}>
 
         {
 
@@ -56,17 +81,10 @@ export default class Login extends React.Component {
 
               <Text>Email</Text>
             </TouchableHighlight>
-            {/*<TextInput
-              style={{ height: 40 }}
-              placeholder="Email Address"
-              onChangeText={(email) => this.setState({email})}
-            />*/}
           </View>
-
         }
+      </View>*/
 
-      </View>
-    );
   }
 }
 

@@ -3,30 +3,14 @@ import { StyleSheet, Platform, Image, Text, View } from 'react-native';
 import Login from './screens/Login.js';
 import UserPage from './screens/UserPage.js';
 import firebase from 'react-native-firebase';
-import { StackNavigator } from 'react-navigation';
-
-const RootStack = StackNavigator(
-  {
-    Home: {
-      screen: App,
-    },
-    Login: {
-      screen: Login,
-    },
-    UserPage: {
-      screen: UserPage,
-    },
-  },
-  {
-    initialRouteName: 'Home',
-  }
-);
+import { LoggedIn, LoggedOut, createRootNavigator, RootStack } from './screens/RootNavigation.js';
 
 export default class App extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       loading: true,
+      signedIn: false,
       // firebase things?
     };
     this.authSubscription = null;
@@ -37,6 +21,7 @@ export default class App extends React.Component {
       this.setState({
         loading: false,
         user,
+        signedIn: true,
       });
     });
   }
@@ -47,23 +32,30 @@ export default class App extends React.Component {
     }
   }
 
+  handleLogOut() {
+    this.setState({signedIn: false});
+
+    firebase.auth().signOut()
+    .then(() => {
+
+    })
+    .catch((error) => {
+
+    });
+  }
+
   render() {
-    // If the user has not authenticated
-    // The application is initialising
-    if(this.state.loading) return null;
+    const { signedIn, loading } = this.state;
 
-    if (this.state.user) {
-      //<UserPage user={this.state.user}/>
-      this.props.navigation.navigate('UserPage');
+    if(loading) {
+      return null;
     }
-    // The user is an Object, so they're logged in
-    //if (this.state.user) return <UserPage />;
-    // The user is null, so they're logged out
 
-    return (
-        //<Login />
-        this.props.navigation.navigate('Login')
-    );
+    if(this.state.signedIn) {
+      return <UserPage onLogOutPress={this.handleLogOut.bind(this)}/>;
+    } else {
+      return <Login />;
+    }
   }
 }
 

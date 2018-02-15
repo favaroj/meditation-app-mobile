@@ -3,6 +3,7 @@ import ReactNative from 'react-native';
 import { View, Text, TextInput, TouchableHighlight, StyleSheet, Image } from 'react-native';
 import firebase from 'react-native-firebase';
 import UserPage from './UserPage.js';
+import { RootStack } from './RootNavigation.js';
 
 class LoginWithEmail extends React.Component {
   constructor(props) {
@@ -12,14 +13,18 @@ class LoginWithEmail extends React.Component {
         password: '',
         signInSuccess: false,
         user: null,
+        signedIn: false,
       }
   }
 
   onLogin = () => {
   const { email, password } = this.state;
+
+
   firebase.auth().signInWithEmailAndPassword(email, password)
     .then((user) => {
-      this.setState({ signInSuccess: true , user: user });
+        this.setState({ signedIn: true });
+
       // If you need to do anything with the user, do it here
       // The user will be logged in automatically by the
       // `onAuthStateChanged` listener we set up in App.js earlier
@@ -52,11 +57,13 @@ class LoginWithEmail extends React.Component {
 
   render () {
 
-    if(this.state.signInSuccess) {
-      return(
-        <UserPage user={this.state.user}/>
-      );
+    const { signedIn } = this.state;
+    const Layout = RootStack(signedIn);
+
+    if(signedIn) {    
+      return <Layout />
     }
+
     return(
       <View>
       <TextInput
