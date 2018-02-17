@@ -1,9 +1,12 @@
 import React from 'react';
 import { StyleSheet, Platform, Image, Text, View } from 'react-native';
+import { Router, Scene, Actions, ActionConst } from 'react-native-router-flux';
+import firebase from 'react-native-firebase';
+
 import Login from './screens/Login.js';
 import UserPage from './screens/UserPage.js';
-import firebase from 'react-native-firebase';
 import { LoggedIn, LoggedOut, createRootNavigator, RootStack } from './screens/RootNavigation.js';
+import LoginWithEmail from './screens/LoginWithEmail';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -18,6 +21,12 @@ export default class App extends React.Component {
 
   componentDidMount() {
     this.authSubscription = firebase.auth().onAuthStateChanged((user) => {
+      if(user) {
+        Actions.userPage({type: ActionConst.RESET})
+      } else {
+        Actions.login()
+      }
+      
       this.setState({
         loading: false,
         user,
@@ -45,7 +54,16 @@ export default class App extends React.Component {
   }
 
   render() {
-    const { signedIn, loading } = this.state;
+    return(
+      <Router>
+        <Scene key="root">
+          <Scene key="login" component={Login} title="Login" hideNavBar type={ActionConst.RESET} animation="fade" duration={1}/>
+          <Scene key="loginWithEmail" component={LoginWithEmail} title="Login with Email"  animation="fade" duration={1}/>
+          <Scene key="userPage" component={UserPage} title="Profile"  hideNavBar type={ActionConst.RESET}/>
+        </Scene>
+      </Router>
+    )
+    /*const { signedIn, loading } = this.state;
 
     if(loading) {
       return null;
@@ -55,7 +73,7 @@ export default class App extends React.Component {
       return <UserPage onLogOutPress={this.handleLogOut.bind(this)}/>;
     } else {
       return <Login />;
-    }
+    }*/
   }
 }
 

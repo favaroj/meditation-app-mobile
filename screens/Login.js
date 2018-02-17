@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TextInput, TouchableHighlight, StyleSheet, Image } from 'react-native';
 import firebase from 'react-native-firebase';
+import { Actions, ActionConst } from 'react-native-router-flux';
 import LoginWithEmail from './LoginWithEmail.js';
 
 export default class Login extends React.Component {
@@ -22,6 +23,10 @@ export default class Login extends React.Component {
     }
   }
 
+  loginWithEmail = () => {
+    Actions.loginWithEmail()
+  }
+
   render() {
       const { showLoginWithEmail } = this.state;
       if(showLoginWithEmail) {
@@ -31,19 +36,23 @@ export default class Login extends React.Component {
           <View style={styles.loginMethodsContainer}>
             <View>
             <View style={styles.imageContainer}>
-            <Image style={styles.image} source={require('../assets/final-fantasy-bkgr.png')} />
-            <View style={styles.headerContainer}>
-            <Text style={styles.mainHeader}>Me-re-da</Text>
-            <Text style={styles.subHeader}>Terra Meditation</Text>
+              <Image style={styles.image} source={require('../assets/final-fantasy-bkgr.png')} />
+              <View style={styles.headerContainer}>
+                <Text style={styles.mainHeader}>Me-re-da</Text>
+                <Text style={styles.subHeader}>Terra Meditation</Text>
+              </View>
             </View>
             </View>
-            </View>
+            <View style={styles.loginWithEmailContainer}>
+            <Text>email</Text>
             <TouchableHighlight
-            style={styles.button}
-              onPress={() => this.setState({showLoginWithEmail: true})}
+            style={styles.emailButton}
+              onPress={this.loginWithEmail}
             >
-              <Text>Email</Text>
+            <Image style={styles.emailImage} source={require('../assets/email-effect.png')} />
+           
             </TouchableHighlight>
+            </View>
           </View>
         );
       }
@@ -92,12 +101,16 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    paddingHorizontal: 10
+    paddingHorizontal: 10, 
+    backgroundColor: '#FFFFFF'
   },
   button: {
     alignItems: 'center',
     backgroundColor: '#DDDDDD',
     padding: 10
+  },
+  emailButton: {
+
   },
   imageContainer: {
     paddingTop: 50,
@@ -109,8 +122,20 @@ const styles = StyleSheet.create({
     width: 335,
     height: 250,
   },
+  emailImage: {
+    width: 235,
+    height: 25,
+    marginLeft: 10,
+  },
+  loginWithEmailContainer: {
+    marginTop: 30,
+    justifyContent: 'center',
+    flexDirection: 'row',
+  },
   loginMethodsContainer: {
     flex: 1,
+    backgroundColor: '#FFFFFF',
+    paddingHorizontal: 10,
   },
   headerContainer: {
     alignItems: 'flex-end',
