@@ -39,7 +39,7 @@ export default class UserPage extends React.Component {
     }
 
         return (
-          <View>
+          <View style={styles.container}>
             <TouchableHighlight
               onPress={this.onLogOut}
               style={styles.button}
@@ -61,6 +61,7 @@ const styles = StyleSheet.create({
   button: {
     alignItems: 'center',
     backgroundColor: '#DDDDDD',
-    padding: 10
+    padding: 10,
+
   },
 });

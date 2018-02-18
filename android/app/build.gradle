@@ -99,8 +99,10 @@ android {
     dexOptions {
         javaMaxHeapSize "4g"
     }
-    compileSdkVersion 24
-    buildToolsVersion "23.0.1"
+    //compileSdkVersion 24
+    //buildToolsVersion "23.0.1"
+    compileSdkVersion 26
+    buildToolsVersion "26.0.2"
 
     defaultConfig {
         applicationId "com.wellness.meditationapp"
@@ -152,6 +154,10 @@ dependencies {
         transitive = false
     }
 
+    // Facebook dependencies
+    compile project(':react-native-fbsdk')
+    compile 'com.facebook.android:facebook-android-sdk:[4,5)'
+
     // RNFirebase required dependencies
     compile "com.google.firebase:firebase-core:11.8.0"
     compile "com.google.android.gms:play-services-base:11.8.0"
@@ -172,7 +178,8 @@ dependencies {
     }
 
     compile fileTree(dir: "libs", include: ["*.jar"])
-    compile "com.android.support:appcompat-v7:23.0.1"
+    //compile "com.android.support:appcompat-v7:23.0.1"
+    compile "com.android.support:appcompat-v7:26.0.2"
     compile "com.facebook.react:react-native:+"  // From node_modules
 }
 

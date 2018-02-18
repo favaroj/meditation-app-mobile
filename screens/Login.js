@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TextInput, TouchableHighlight, StyleSheet, Image } from 'react-native';
 import firebase from 'react-native-firebase';
+import { AccessToken, LoginManager } from 'react-native-fbsdk';
 import { Actions, ActionConst } from 'react-native-router-flux';
 import LoginWithEmail from './LoginWithEmail.js';
 
@@ -27,6 +28,36 @@ export default class Login extends React.Component {
     Actions.loginWithEmail()
   }
 
+  // Calling the following function will open the FB login dialogue:
+onLoginOrRegister = async () => {
+  try {
+    const result = await LoginManager.logInWithReadPermissions(['public_profile', 'email']);
+
+    if (result.isCancelled) {
+      throw new Error('User cancelled request'); // Handle this however fits the flow of your app
+    }
+
+    console.log(`Login success with permissions: ${result.grantedPermissions.toString()}`);
+
+    // get the access token
+    const data = await AccessToken.getCurrentAccessToken();
+
+    if (!data) {
+      throw new Error('Something went wrong obtaining the users access token'); // Handle this however fits the flow of your app
+    }
+
+    // create a new firebase credential with the token
+    const credential = firebase.auth.FacebookAuthProvider.credential(data.accessToken);
+
+    // login with credential
+    const currentUser = await firebase.auth().signInWithCredential(credential);
+
+    console.info(JSON.stringify(currentUser.toJSON()))
+  } catch (e) {
+    console.error(e);
+  }
+}
+
   render() {
       const { showLoginWithEmail } = this.state;
       if(showLoginWithEmail) {
@@ -51,6 +82,15 @@ export default class Login extends React.Component {
             >
             <Image style={styles.emailImage} source={require('../assets/email-effect.png')} />
            
+            </TouchableHighlight>
+            </View>
+            <Text style={{marginTop: 10}}>Or</Text>
+            <View style={styles.socialLoginContainer}>
+            <TouchableHighlight onPress={this.onLoginOrRegister}>
+            <Image style={styles.facebookImage} source={require('../assets/facebook.png')} />
+            </TouchableHighlight>
+            <TouchableHighlight >
+            <Image style={styles.googleImage} source={require('../assets/google.png')} />
             </TouchableHighlight>
             </View>
           </View>
@@ -102,7 +142,8 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     paddingHorizontal: 10, 
-    backgroundColor: '#FFFFFF'
+    backgroundColor: '#FFFFFF',
+    alignItems: 'center',
   },
   button: {
     alignItems: 'center',
@@ -127,22 +168,38 @@ const styles = StyleSheet.create({
     height: 25,
     marginLeft: 10,
   },
+  facebookImage: {
+    width: 40,
+    height: 40,
+  },
+  googleImage: {
+    width: 40,
+    height: 40,
+    marginLeft: 15,
+  },
   loginWithEmailContainer: {
-    marginTop: 30,
+    marginTop: 70,
     justifyContent: 'center',
     flexDirection: 'row',
+    alignItems: 'center',
   },
   loginMethodsContainer: {
     flex: 1,
     backgroundColor: '#FFFFFF',
     paddingHorizontal: 10,
+    //justifyContent: 'center',
+    alignItems: 'center',
+  },
+  socialLoginContainer: {
+    flexDirection: 'row',
+    marginTop: 10,
   },
   headerContainer: {
     alignItems: 'flex-end',
   },
   mainHeader: {
     fontSize: 35,
-    letterSpacing: 55,
+    //letterSpacing: 55,
     marginBottom: 0,
     paddingBottom: 0,
     includeFontPadding: false,
