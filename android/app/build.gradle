@@ -116,6 +116,17 @@ android {
         // because of firestore:
         multiDexEnabled true
     }
+    // This is for apk release
+    signingConfigs {
+        release {
+            if (project.hasProperty('MYAPP_RELEASE_STORE_FILE')) {
+                storeFile file(MYAPP_RELEASE_STORE_FILE)
+                storePassword MYAPP_RELEASE_STORE_PASSWORD
+                keyAlias MYAPP_RELEASE_KEY_ALIAS
+                keyPassword MYAPP_RELEASE_KEY_PASSWORD
+            }
+        }
+    }
     splits {
         abi {
             reset()
@@ -128,6 +139,7 @@ android {
         release {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            signingConfig signingConfigs.release // This is for apk release
         }
         debug {
             minifyEnabled false
@@ -152,6 +164,12 @@ android {
 dependencies {
     compile(project(':react-native-firebase')) {
         transitive = false
+    }
+
+    // Google signin dependencies
+    compile 'com.google.android.gms:play-services-auth:11.8.0'
+    compile(project(":react-native-google-signin")){
+        exclude group: "com.google.android.gms" // very important
     }
 
     // Facebook dependencies

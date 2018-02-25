@@ -22,12 +22,17 @@
     "preset": "react-native"
   },
   "dependencies": {
+    "email-validator": "^1.1.1",
     "fbjs": "^0.8.16",
     "react": "^16.2.0",
     "react-native": "^0.52.2",
+    "react-native-animatable": "^1.2.4",
     "react-native-fbsdk": "^0.7.0",
     "react-native-firebase": "^3.2.2",
+    "react-native-form-validator": "^0.2.0",
+    "react-native-google-signin": "^0.12.0",
     "react-native-router-flux": "^4.0.0-beta.28",
-    "react-navigation": "^1.0.3"
+    "react-navigation": "^1.0.3",
+    "validate.js": "^0.12.0"
   }
 }

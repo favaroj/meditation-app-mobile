@@ -21,8 +21,15 @@ export default class App extends React.Component {
 
   componentDidMount() {
     this.authSubscription = firebase.auth().onAuthStateChanged((user) => {
+      
       if(user) {
-        Actions.userPage({type: ActionConst.RESET})
+        if(user.displayName !== null) {
+          var firstName = user.displayName.split(' ').slice(0, -1).join(' ');
+          Actions.userPage({type: ActionConst.RESET, text: firstName})
+        } else {
+          Actions.userPage({type: ActionConst.RESET, text: user.email})
+        }
+        
       } else {
         Actions.login()
       }
